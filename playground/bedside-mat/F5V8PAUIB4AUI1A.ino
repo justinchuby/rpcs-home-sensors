@@ -64,7 +64,7 @@ void setup(){
   pinMode(w3, OUTPUT); 
   
   pinMode(OUT_pin, OUTPUT); 
-  
+  pinMode(SIG_pin, INPUT); 
   pinMode(STATUS_pin, OUTPUT);
   pinMode(COL_pin, OUTPUT);
 
@@ -86,44 +86,46 @@ void setup(){
  
   
   Serial.begin(115200);
-  
-  Serial.println("\n\Calibrating...\n");
-  
-  // Full of 0's of initial matrix
-  for(byte j = 0; j < 15; j ++){ 
-    writeMux(j);
-    for(byte i = 0; i < 15; i ++)
-      calibra[j][i] = 0;
-  }
-  
-  // Calibration
-  for(byte k = 0; k < 50; k++){  
-    for(byte j = 0; j < 15; j ++){ 
-      writeMux(j);
-      for(byte i = 0; i < 15; i ++)
-        calibra[j][i] = calibra[j][i] + readMux(i);
-    }
-  }
-  
-  //Print averages
-  for(byte j = 0; j < 15; j ++){ 
-    writeMux(j);
-    for(byte i = 0; i < 15; i ++){
-      calibra[j][i] = calibra[j][i]/50;
-      if(calibra[j][i] < minsensor)
-        minsensor = calibra[j][i];
-      Serial.print(calibra[j][i]);
-      Serial.print("\t");
-    }
-  Serial.println(); 
-  }
-  
-  Serial.println();
-  Serial.print("Minimum Value: ");
-  Serial.println(minsensor);
-  Serial.println();
-  
-  establishContact();
+  Serial.println("asdfg");
+  Serial.println("\nCalibrating...\n");
+//  
+//  // Full of 0's of initial matrix
+//  for(byte j = 0; j < 16; j ++){ 
+//    writeMux(j);
+//    for(byte i = 0; i < 16; i ++) {
+//      calibra[j][i] = 0;
+//    }
+//  }
+//  
+//  // Calibration
+//  for(byte k = 0; k < 2; k++){  
+//    for(byte j = 0; j < 15; j++){ 
+//      writeMux(j);
+//      for(byte i = 0; i < 15; i ++) {
+//        calibra[j][i] = calibra[j][i] + readMux(i);
+//      }
+//    }
+//  }
+//  
+//  //Print averages
+//  for(byte j = 0; j < 2; j ++){ 
+//    writeMux(j);
+//    for(byte i = 0; i < 2; i ++){
+//      calibra[j][i] = calibra[j][i]/50;
+//      if(calibra[j][i] < minsensor)
+//        minsensor = calibra[j][i];
+//      Serial.print(calibra[j][i]);
+//      Serial.print("\t");
+//    }
+//    Serial.println(); 
+//  }
+//  
+//  Serial.println();
+//  Serial.print("Minimum Value: ");
+//  Serial.println(minsensor);
+//  Serial.println();
+//  
+//  establishContact();
  
   digitalWrite(COL_pin, LOW);
 }
@@ -132,41 +134,39 @@ void setup(){
 void loop(){
   //Loop through and read all 16 values
   //Reports back Value at channel 6 is: 346
-  if (Serial.available() > 0){
-    inByte = Serial.read();
     
-    if(inByte == 'A'){
-    
-      for(int j = 0; j < 2; j++){ 
+      for(int j = 0; j < 4; j++){ 
         writeMux(j);
         
-        for(int i = 0; i < 2; i++){
-            
+        for(int i = 0; i < 10; i++){
           valor = readMux(i);
           
           //Saturation sensors
-          int limsup = 1024;
-          if(valor > limsup)
-            valor = limsup;
-            
-          if(valor < calibra[j][i])
-            valor = calibra[j][i];  
+//          int limsup = 1024;
+//          if(valor > limsup)
+//            valor = limsup;
+//            
+//          if(valor < calibra[j][i])
+//            valor = calibra[j][i];  
+//          
+//          valor = map(valor,minsensor, limsup,1,1024); 
+//          
+//          if(valor < 15)
+//            valor = 0;
+//          if(valor > 1024)
+//            valor = 254;
+//          Serial.print(j);
+//          Serial.print(i);
           
-          valor = map(valor,minsensor, limsup,1,1024); 
-          
-          if(valor < 15)
-            valor = 0;
-          if(valor > 1024)
-            valor = 254;
-          
-          Serial.println(valor);
+          Serial.print(valor);
+          Serial.print("\t");
           digitalWrite(COL_pin,!digitalRead(COL_pin));
-          delay(100);
+          delay(50);
         } 
+        Serial.println();
       }
-    }
-        
-  }
+      Serial.println();
+      Serial.println();
 }
 
 
@@ -196,8 +196,7 @@ void writeMux(byte channel){
 
 void establishContact() {
   if (Serial.available() <= 0) {
-    Serial.print('A');   // send a capital A
+    Serial.println('A');   // send a capital A
     delay(300);
   }
 }
-
