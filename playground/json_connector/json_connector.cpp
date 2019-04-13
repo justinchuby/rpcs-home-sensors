@@ -9,10 +9,13 @@ bool json_connector::set_server(char* url) {
   _server_url = url;
 }
 
+// TODO: check wifi status and reconnect if needed
+
 bool send(event_type type, char* obj) {
   // The message is a json object in string
   // Deserialize the object and construct the json doc
 
+  // TODO: determine the size
   const size_t capacity = JSON_ARRAY_SIZE(2) + JSON_OBJECT_SIZE(3);
   DynamicJsonDocument doc(capacity);
 
@@ -26,6 +29,7 @@ bool send(event_type type, char* obj) {
   // Send the message over http
   http.begin(_server_url);
   http.addHeader("Content-Type", "application/json");
-  int code = http.POST(doc.as<String>());
-
+  int resCode = http.POST(doc.as<String>());
+  Serial.println(resCode, ":", doc.as<String>());
+  http.end();
 }
