@@ -3,18 +3,21 @@
 
 #include "HSJsonConnector"
 
-HSJsonConnector::HSJsonConnector(char* sensor_id, char* sensor_type) {
+HSJsonConnector::HSJsonConnector() {
+}
+
+void HSJsonConnector::set_server(char* url) {
+  // TODO: check param type and copy the values
+  _server_url = url;
+}
+
+void HSJsonConnector::set_sensor(char * sensor_id, char * sensor_type) {
+  // TODO: check param type and copy the values
   _sensor_id = sensor_id;
   _sensor_type = sensor_type;
 }
 
-bool HSJsonConnector::set_server(char* url) {
-  _server_url = url;
-}
-
-// TODO: check wifi status and reconnect if needed
-
-bool send(event_type type, char* obj) {
+int send(event_type type, char* obj) {
   // The message is a json object in string
   // Deserialize the object and construct the json doc
 
@@ -30,9 +33,18 @@ bool send(event_type type, char* obj) {
   doc["data"] = data;
 
   // Send the message over http
-  http.begin(_server_url);
-  http.addHeader("Content-Type", "application/json");
-  int resCode = http.POST(doc.as<String>());
+  _client.begin(_server_url);
+  _client.addHeader("Content-Type", "application/json");
+  
+  int resCode = _client.POST(doc.as<String>());
+  if (resCode > 0) {
+    Serial.printf("[HTTP] GET... code: %d\n", resCode);
+  } else {
+    Serial.printf("[HTTP] GET... failed, error: %s\n",
+                      _client.errorToString(resCode).c_str());
+  }
+
   Serial.println(resCode, ":", doc.as<String>());
-  http.end();
+  _client.end();
+  return resCode
 }
