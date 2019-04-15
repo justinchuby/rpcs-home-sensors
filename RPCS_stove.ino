@@ -55,21 +55,23 @@ void loop() {
     int count = 0;
     for(int k=1; k<=3; k++)
     {
-      for(int j=1; j<=AMG88xx_PIXEL_ARRAY_SIZE; j++){
-        if(pixels[j] > 42.0){
+      for(int j=0; j<=AMG88xx_PIXEL_ARRAY_SIZE - 1; j++){
+        if(pixels[j] > 30.0){
           count = count +1;
           break;
         }
+        
       }
       delay(1000);
-      amg.readPixels(pixels);
+        amg.readPixels(pixels);
+      
     }
     if(count==3)
     {
       Serial.println("Stove is on");
     }
     
-    
+    count = 0;
     //delay a second
     delay(1000);
 }
