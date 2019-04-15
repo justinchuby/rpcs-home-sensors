@@ -1,11 +1,14 @@
-#include "json_connector.h"
+// HSJsonConnector is the class that handles json translation and http communications
+// HS is short for Home Sensors
 
-json_connector::json_connector(char* sensor_id, char* sensor_type) {
+#include "HSJsonConnector"
+
+HSJsonConnector::HSJsonConnector(char* sensor_id, char* sensor_type) {
   _sensor_id = sensor_id;
   _sensor_type = sensor_type;
 }
 
-bool json_connector::set_server(char* url) {
+bool HSJsonConnector::set_server(char* url) {
   _server_url = url;
 }
 

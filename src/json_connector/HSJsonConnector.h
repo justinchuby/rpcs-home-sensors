@@ -11,9 +11,9 @@ enum class event_type {
     ERROR
 };
 
-class json_connector {
+class HSJsonConnector {
 public:
-    json_connector(char* sensor_id, char* sensor_type);
+    HSJsonConnector(char* sensor_id, char* sensor_type);
     bool set_server(char* url)
     // returns a http response code
     // Accepts a serialized json object
