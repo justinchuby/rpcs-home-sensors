@@ -39,6 +39,7 @@ void setup() {
 
   wifiMulti.addAP(WIFI_SSID, WIFI_PASS);
   connector.setSensor(SENSOR_ID, SENSOR_TYPE);
+  connector.setServer(SERVER_URL)
   thermalCam.begin();
 }
 
@@ -54,8 +55,10 @@ void loop() {
   // Serial.println();
 
   // wait for WiFi connection
+  // TODO: use logic to tell stove hot or stove code
+  string data = "{message:\"STOVE_HOT\", value:[<TODO: format values here>]}";
   if ((wifiMulti.run() == WL_CONNECTED)) {
-    connector.
+    connector.send("data", data);
   }
   delay(100);
 }
