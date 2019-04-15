@@ -16,7 +16,7 @@ bool send(event_type type, char* obj) {
   // Deserialize the object and construct the json doc
 
   // TODO: determine the size
-  const size_t capacity = JSON_ARRAY_SIZE(2) + JSON_OBJECT_SIZE(3);
+  const size_t capacity = JSON_OBJECT_SIZE(4);
   DynamicJsonDocument doc(capacity);
 
   data = serialized(obj)
