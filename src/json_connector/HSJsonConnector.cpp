@@ -6,12 +6,12 @@
 HSJsonConnector::HSJsonConnector() {
 }
 
-void HSJsonConnector::set_server(char* url) {
+void HSJsonConnector::setServer(char* url) {
   // TODO: check param type and copy the values
   _server_url = url;
 }
 
-void HSJsonConnector::set_sensor(char * sensor_id, char * sensor_type) {
+void HSJsonConnector::setSensor(char * sensor_id, char * sensor_type) {
   // TODO: check param type and copy the values
   _sensor_id = sensor_id;
   _sensor_type = sensor_type;

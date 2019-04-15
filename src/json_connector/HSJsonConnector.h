@@ -13,8 +13,8 @@ enum class event_type {
 
 class HSJsonConnector {
 public:
-    void set_sensor(char* sensor_id, char* sensor_type);
-    void set_server(char* url)
+    void setSensor(char* sensor_id, char* sensor_type);
+    void setServer(char* url)
     // returns a http response code
     // Accepts a serialized json object
     int send(event_type type, char* obj) 
