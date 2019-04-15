@@ -4,7 +4,7 @@
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
 
-enum class event_type {
+enum class HSEventType {
     DATA
     HANDSHAKE
     MESSAGE
@@ -17,7 +17,7 @@ public:
     void setServer(char* url)
     // returns a http response code
     // Accepts a serialized json object
-    int send(event_type type, char* obj) 
+    int send(HSEventType type, char* obj) 
 
 private:
     char* _sensor_id
