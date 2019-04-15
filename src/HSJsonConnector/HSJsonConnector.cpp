@@ -17,7 +17,7 @@ void HSJsonConnector::setSensor(char * sensor_id, char * sensor_type) {
   _sensor_type = sensor_type;
 }
 
-int send(event_type type, char* obj) {
+int send(HSEventType type, char* obj) {
   // The message is a json object in string
   // Deserialize the object and construct the json doc
 
@@ -27,7 +27,8 @@ int send(event_type type, char* obj) {
 
   data = serialized(obj)
 
-  doc["event_type"] = event_type;
+  // Translate event_type to string
+  doc["event_type"] = type;
   doc["sensor_id"] = _sensor_id;
   doc["sensor_type"] = _sensor_type;
   doc["data"] = data;
