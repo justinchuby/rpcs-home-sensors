@@ -27,8 +27,23 @@ int send(HSEventType type, char* obj) {
 
   data = serialized(obj)
 
-  // Translate event_type to string
-  doc["event_type"] = type;
+  switch (type)
+  {
+    case DATA:
+      doc["event_type"] = "data";
+      break;
+    case HANDSHAKE:
+      doc["event_type"] = "handshake";
+      break;
+    case MESSAGE:
+      doc["event_type"] = "message";
+      break;
+    case ERROR:
+      doc["event_type"] = "error";
+      break;
+    default:
+      break;
+  }
   doc["sensor_id"] = _sensor_id;
   doc["sensor_type"] = _sensor_type;
   doc["data"] = data;

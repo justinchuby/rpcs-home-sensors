@@ -54,10 +54,10 @@ void loop() {
   // // End each frame with a linefeed
   // Serial.println();
 
-  // wait for WiFi connection
   // TODO: use logic to tell stove hot or stove code
   string data = "{message:\"STOVE_HOT\", value:[<TODO: format values here>]}";
   if ((wifiMulti.run() == WL_CONNECTED)) {
+    // Wait for WiFi connection
     connector.send("data", data);
   }
   delay(100);
