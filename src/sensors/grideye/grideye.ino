@@ -3,8 +3,8 @@
 #include <WiFi.h>
 #include <WiFiMulti.h>
 // #include <fmt/core.h>
-#include <string>
 #include <array>
+#include <string>
 #include "JsonConnector.h"
 #include "config.h"
 
@@ -50,7 +50,7 @@ void loop() {
   string data = "{message:\"STOVE_HOT\", value:[" + pixels_string + "]}";
   if ((wifiMulti.run() == WL_CONNECTED)) {
     // Wait for WiFi connection
-    connector.send("data", data);
+    connector.send(HSEvent::DATA, data);
   }
   delay(100);
 }

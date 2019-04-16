@@ -5,15 +5,16 @@
 #include <HTTPClient.h>
 #include <string>
 
-enum class HSEventType { DATA HANDSHAKE MESSAGE ERROR };
+enum class HSEvent { DATA, HANDSHAKE, MESSAGE, ERROR };
 
 class HSJsonConnector {
  public:
-  void setSensor(std::string sensor_id, std::string sensor_type);
-  void setServer(std::string url);
+  void setSensor(const char* sensor_id, const char* sensor_type);
+
+  void setServer(const char* url);
   // returns a http response code
   // Accepts a serialized json object
-  int send(HSEventType type, std::string obj);
+  int send(HSEvent type, const std::string &obj);
 
  private:
   std::string _sensor_id;

@@ -1,7 +1,7 @@
 // HSJsonConnector is the class that handles json translation and http
 // communications HS is short for Home Sensors
 
-#include "HSJsonConnector"
+#include "HSJsonConnector.h"
 
 HSJsonConnector::HSJsonConnector() {}
 
@@ -12,12 +12,11 @@ void HSJsonConnector::setServer(const char* url) {
 
 void HSJsonConnector::setSensor(const char* sensor_id,
                                 const char* sensor_type) {
-  // TODO: check param type and copy the values
   _sensor_id = sensor_id;
   _sensor_type = sensor_type;
 }
 
-int send(HSEventType type, char* obj) {
+int send(HSEventType type, const std::string& obj) {
   // The message is a json object in string
   // Deserialize the object and construct the json doc
 
@@ -25,19 +24,19 @@ int send(HSEventType type, char* obj) {
   const size_t capacity = JSON_OBJECT_SIZE(4);
   DynamicJsonDocument doc(capacity);
 
-  data = serialized(obj)
+  data = serialized(obj);
 
-      switch (type) {
-    case DATA:
+  switch (type) {
+    case HSEvent::DATA:
       doc["event_type"] = "data";
       break;
-    case HANDSHAKE:
+    case HSEvent::HANDSHAKE:
       doc["event_type"] = "handshake";
       break;
-    case MESSAGE:
+    case HSEvent::MESSAGE:
       doc["event_type"] = "message";
       break;
-    case ERROR:
+    case HSEvent::ERROR:
       doc["event_type"] = "error";
       break;
     default:
