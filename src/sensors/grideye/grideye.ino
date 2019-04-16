@@ -1,26 +1,8 @@
-/***************************************************************************
-  This is a library for the AMG88xx GridEYE 8x8 IR camera
-
-  This sketch tries to read the pixels from the sensor
-
-  Designed specifically to work with the Adafruit AMG88 breakout
-  ----> http://www.adafruit.com/products/3538
-
-  These sensors use I2C to communicate. The device's I2C address is 0x69
-
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit andopen-source hardware by purchasing products
-  from Adafruit!
-
-  Written by Dean Miller for Adafruit Industries.
-  BSD license, all text above must be included in any redistribution
- ***************************************************************************/
-
 #include <Adafruit_AMG88xx.h>
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WiFiMulti.h>
-// #include <Wire.h>
+#include <fmt/core.h>
 #include "JsonConnector.h"
 #include "config.h"
 
@@ -29,9 +11,8 @@ WiFiMulti wifiMulti;
 Adafruit_AMG88xx thermalCam;
 HSJsonConnector connector;
 
-float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
-
-// TODO: check wifi status and reconnect if needed
+std::array<float, AMG88xx_PIXEL_ARRAY_SIZE> pixels;
+// float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 
 void setup() {
   Serial.begin(115200);
@@ -55,7 +36,14 @@ void loop() {
   // Serial.println();
 
   // TODO: use logic to tell stove hot or stove code
-  string data = "{message:\"STOVE_HOT\", value:[<TODO: format values here>]}";
+  std::string pixels_string;
+  for (auto v : pixels) {
+    pixels_string += (pixels_string.empty() ? "" : ",") + to_string(v);
+  }
+  // for (int i = 0; i < AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+  //   pixels_string += fmt::format("{:.2f}", pixels[i]);
+  // }
+  string data = "{message:\"STOVE_HOT\", value:[" + pixels_string + "]}";
   if ((wifiMulti.run() == WL_CONNECTED)) {
     // Wait for WiFi connection
     connector.send("data", data);
