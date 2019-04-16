@@ -39,7 +39,7 @@ void setup() {
 
   wifiMulti.addAP(WIFI_SSID, WIFI_PASS);
   connector.setSensor(SENSOR_ID, SENSOR_TYPE);
-  connector.setServer(SERVER_URL)
+  connector.setServer(SERVER_URL);
   thermalCam.begin();
 }
 

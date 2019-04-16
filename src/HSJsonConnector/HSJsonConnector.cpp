@@ -1,17 +1,17 @@
-// HSJsonConnector is the class that handles json translation and http communications
-// HS is short for Home Sensors
+// HSJsonConnector is the class that handles json translation and http
+// communications HS is short for Home Sensors
 
 #include "HSJsonConnector"
 
-HSJsonConnector::HSJsonConnector() {
-}
+HSJsonConnector::HSJsonConnector() {}
 
-void HSJsonConnector::setServer(char* url) {
+void HSJsonConnector::setServer(const char* url) {
   // TODO: check param type and copy the values
   _server_url = url;
 }
 
-void HSJsonConnector::setSensor(char * sensor_id, char * sensor_type) {
+void HSJsonConnector::setSensor(const char* sensor_id,
+                                const char* sensor_type) {
   // TODO: check param type and copy the values
   _sensor_id = sensor_id;
   _sensor_type = sensor_type;
@@ -27,8 +27,7 @@ int send(HSEventType type, char* obj) {
 
   data = serialized(obj)
 
-  switch (type)
-  {
+      switch (type) {
     case DATA:
       doc["event_type"] = "data";
       break;
@@ -51,13 +50,13 @@ int send(HSEventType type, char* obj) {
   // Send the message over http
   _client.begin(_server_url);
   _client.addHeader("Content-Type", "application/json");
-  
+
   int resCode = _client.POST(doc.as<String>());
   if (resCode > 0) {
     Serial.printf("[HTTP] GET... code: %d\n", resCode);
   } else {
     Serial.printf("[HTTP] GET... failed, error: %s\n",
-                      _client.errorToString(resCode).c_str());
+                  _client.errorToString(resCode).c_str());
   }
 
   Serial.println(resCode, ":", doc.as<String>());
