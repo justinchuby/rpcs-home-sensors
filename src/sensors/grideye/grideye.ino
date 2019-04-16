@@ -2,10 +2,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WiFiMulti.h>
-// #include <fmt/core.h>
-#include <array>
-#include <string>
-#include "JsonConnector.h"
+#include "HSJsonConnector/HSJsonConnector.h"
 #include "config.h"
 
 using namespace std;
@@ -15,8 +12,7 @@ WiFiMulti wifiMulti;
 Adafruit_AMG88xx thermalCam;
 HSJsonConnector connector;
 
-array<float, AMG88xx_PIXEL_ARRAY_SIZE> pixels;
-// float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
+float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 
 void setup() {
   Serial.begin(115200);
@@ -32,22 +28,20 @@ void loop() {
   // read all the pixels
   thermalCam.readPixels(pixels);
 
-  // for (int i = 0; i < AMG88xx_PIXEL_ARRAY_SIZE; i++) {
-  //   Serial.print(pixels[i]);
-  //   Serial.print(",");
-  // }
+  String pixels_string;
+  for (int i = 0; i < AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+    pixels_string += (pixels_string==NULL ? "" : ",") + String(pixels[i], 2);
+  }
   // // End each frame with a linefeed
   // Serial.println();
 
   // TODO: use logic to tell stove hot or stove code
-  string pixels_string;
-  for (float v : pixels) {
-    pixels_string += (pixels_string.empty() ? "" : ",") + to_string(v);
-  }
-  // for (int i = 0; i < AMG88xx_PIXEL_ARRAY_SIZE; i++) {
-  //   pixels_string += fmt::format("{:.2f}", pixels[i]);
-  // }
-  string data = "{message:\"STOVE_HOT\", value:[" + pixels_string + "]}";
+//  string pixels_string;
+//  for (float v : pixels) {
+//    pixels_string += (pixels_string.empty() ? "" : ",") + to_string(v);
+//  }
+
+  String data = "{message:\"STOVE_HOT\", value:[" + pixels_string + "]}";
   if ((wifiMulti.run() == WL_CONNECTED)) {
     // Wait for WiFi connection
     connector.send(HSEvent::DATA, data);

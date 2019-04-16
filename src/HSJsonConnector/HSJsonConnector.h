@@ -3,7 +3,6 @@
 
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
-#include <string>
 
 enum class HSEvent { DATA, HANDSHAKE, MESSAGE, ERROR };
 
@@ -14,12 +13,12 @@ class HSJsonConnector {
   void setServer(const char* url);
   // returns a http response code
   // Accepts a serialized json object
-  int send(HSEvent type, const std::string &obj);
+  int send(HSEvent type, const String &obj);
 
  private:
-  std::string _sensor_id;
-  std::string _sensor_type;
-  std::string _server_url;
+  String _sensor_id;
+  String _sensor_type;
+  String _server_url;
   HTTPClient _client;
 };
 
