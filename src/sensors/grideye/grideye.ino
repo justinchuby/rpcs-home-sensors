@@ -2,16 +2,20 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WiFiMulti.h>
-#include <fmt/core.h>
+// #include <fmt/core.h>
+#include <string>
+#include <array>
 #include "JsonConnector.h"
 #include "config.h"
+
+using namespace std;
 
 WiFiMulti wifiMulti;
 // TODO: check what wifiMulti is doing
 Adafruit_AMG88xx thermalCam;
 HSJsonConnector connector;
 
-std::array<float, AMG88xx_PIXEL_ARRAY_SIZE> pixels;
+array<float, AMG88xx_PIXEL_ARRAY_SIZE> pixels;
 // float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 
 void setup() {
@@ -36,8 +40,8 @@ void loop() {
   // Serial.println();
 
   // TODO: use logic to tell stove hot or stove code
-  std::string pixels_string;
-  for (auto v : pixels) {
+  string pixels_string;
+  for (float v : pixels) {
     pixels_string += (pixels_string.empty() ? "" : ",") + to_string(v);
   }
   // for (int i = 0; i < AMG88xx_PIXEL_ARRAY_SIZE; i++) {
