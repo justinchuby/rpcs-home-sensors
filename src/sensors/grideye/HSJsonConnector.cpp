@@ -16,15 +16,14 @@ void HSJsonConnector::setSensor(const char* sensor_id,
   _sensor_type = sensor_type;
 }
 
-int send(HSEventType type, const String& obj) {
+int HSJsonConnector::send(HSEvent type, String obj) {
   // The message is a json object in string
   // Deserialize the object and construct the json doc
 
   // TODO: determine the size
   const size_t capacity = JSON_OBJECT_SIZE(4);
   DynamicJsonDocument doc(capacity);
-
-  data = serialized(obj);
+  auto data = serialized(obj);
 
   switch (type) {
     case HSEvent::DATA:

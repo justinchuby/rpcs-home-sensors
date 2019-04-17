@@ -8,12 +8,13 @@ enum class HSEvent { DATA, HANDSHAKE, MESSAGE, ERROR };
 
 class HSJsonConnector {
  public:
+  HSJsonConnector();
   void setSensor(const char* sensor_id, const char* sensor_type);
 
   void setServer(const char* url);
   // returns a http response code
   // Accepts a serialized json object
-  int send(HSEvent type, const String &obj);
+  int send(HSEvent type, String obj);
 
  private:
   String _sensor_id;

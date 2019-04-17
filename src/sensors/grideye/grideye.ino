@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WiFiMulti.h>
-#include "HSJsonConnector/HSJsonConnector.h"
+#include "HSJsonConnector.h"
 #include "config.h"
 
 using namespace std;
