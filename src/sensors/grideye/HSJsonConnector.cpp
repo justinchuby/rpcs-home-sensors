@@ -48,8 +48,8 @@ int HSJsonConnector::send(HSEvent type, String obj) {
   // Send the message over http
   _client.begin(_server_url);
   _client.addHeader("Content-Type", "application/json");
-
-  int resCode = _client.POST(doc.as<String>());
+  auto serialized_doc = doc.as<const char*>();
+  int resCode = _client.POST(serialized_doc);
   if (resCode > 0) {
     Serial.printf("[HTTP] GET... code: %d\n", resCode);
   } else {
@@ -57,7 +57,9 @@ int HSJsonConnector::send(HSEvent type, String obj) {
                   _client.errorToString(resCode).c_str());
   }
 
-  Serial.println(resCode, ":", doc.as<String>());
+  Serial.print(resCode);
+  Serial.print(": ");
+  Serial.println(serialized_doc);
   _client.end();
-  return resCode
+  return resCode;
 }
