@@ -4,6 +4,8 @@
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
 
+#define MAX_JSON_SIZE 100
+
 enum class HSEvent { DATA, HANDSHAKE, MESSAGE, ERROR };
 
 class HSJsonConnector {

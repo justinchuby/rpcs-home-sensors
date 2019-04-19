@@ -20,10 +20,8 @@ int HSJsonConnector::send(HSEvent type, String obj) {
   // The message is a json object in string
   // Deserialize the object and construct the json doc
 
-  // TODO: determine the size
-  const size_t capacity = JSON_OBJECT_SIZE(4);
+  const size_t capacity = JSON_OBJECT_SIZE(MAX_JSON_SIZE);
   DynamicJsonDocument doc(capacity);
-  auto data = serialized(obj);
 
   switch (type) {
     case HSEvent::DATA:
@@ -43,22 +41,28 @@ int HSJsonConnector::send(HSEvent type, String obj) {
   }
   doc["sensor_id"] = _sensor_id;
   doc["sensor_type"] = _sensor_type;
-  doc["data"] = data;
+  doc["data"] = serialized(obj);
+#ifdef DEBUG
+  serializeJsonPretty(doc, Serial);
+  Serial.println("");
+#endif
 
   // Send the message over http
   _client.begin(_server_url);
+
   _client.addHeader("Content-Type", "application/json");
-  auto serialized_doc = doc.as<const char*>();
+  String serialized_doc;
+  serializeJson(doc, serialized_doc);
   int resCode = _client.POST(serialized_doc);
+
+#ifdef DEBUG
   if (resCode > 0) {
-    Serial.printf("[HTTP] GET... code: %d\n", resCode);
+    Serial.printf("[HTTP] POST... code: %d\n", resCode);
   } else {
-    Serial.printf("[HTTP] GET... failed, error: %s\n",
+    Serial.printf("[HTTP] POST... failed, error: %s\n",
                   _client.errorToString(resCode).c_str());
   }
-
-  Serial.print(resCode);
-  Serial.print(": ");
+#endif
   Serial.println(serialized_doc);
   _client.end();
   return resCode;
