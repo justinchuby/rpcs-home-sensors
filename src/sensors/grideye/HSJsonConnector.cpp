@@ -43,6 +43,7 @@ int HSJsonConnector::send(HSEvent type, String obj) {
   doc["sensor_type"] = _sensor_type;
   doc["data"] = serialized(obj);
 #ifdef DEBUG
+  Serial.println("");
   serializeJsonPretty(doc, Serial);
   Serial.println("");
 #endif
@@ -63,7 +64,6 @@ int HSJsonConnector::send(HSEvent type, String obj) {
                   _client.errorToString(resCode).c_str());
   }
 #endif
-  Serial.println(serialized_doc);
   _client.end();
   return resCode;
 }

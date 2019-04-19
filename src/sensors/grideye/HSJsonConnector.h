@@ -5,6 +5,7 @@
 #include <HTTPClient.h>
 
 #define MAX_JSON_SIZE 100
+#define DEBUG
 
 enum class HSEvent { DATA, HANDSHAKE, MESSAGE, ERROR };
 
