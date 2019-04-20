@@ -4,8 +4,6 @@
 #include "HSJsonConnector.h"
 #include "config.h"
 
-using namespace std;
-
 Adafruit_AMG88xx thermalCam;
 HSJsonConnector connector;
 
@@ -40,7 +38,7 @@ void loop() {
     pixels_string += (pixels_string==NULL ? "" : ",") + String(pixels[i], 2);
   }
 
-  String data = "{message:\"STOVE_HOT\", value:[" + pixels_string + "]}";
+  String data = "{\"message\":\"STOVE_HOT\", \"value\":[" + pixels_string + "]}";
   if (true) {
     // TODO: check wifi connection
     connector.send(HSEvent::DATA, data);
