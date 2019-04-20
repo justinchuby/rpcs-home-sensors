@@ -1,5 +1,4 @@
 from flask import Flask, request
-import sys
 
 app = Flask(__name__)
 
@@ -8,8 +7,7 @@ app = Flask(__name__)
 def main():
     if request.method == 'GET':
         return 'You GOT this'
-    print(request.data)
-    print(request.method, request.get_json(), file=sys.stdout)
+    print(request.method, request.get_json())
     return ''
 
 
