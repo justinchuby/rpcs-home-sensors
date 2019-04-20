@@ -1,7 +1,7 @@
 #include <Adafruit_AMG88xx.h>
 #include <Arduino.h>
 #include <WiFi.h>
-#include "HSJsonConnector.h"
+#include <HSJsonConnector.h>
 #include "config.h"
 
 Adafruit_AMG88xx thermalCam;
