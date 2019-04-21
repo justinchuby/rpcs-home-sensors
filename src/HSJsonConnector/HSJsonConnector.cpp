@@ -48,6 +48,7 @@ int HSJsonConnector::send(HSEvent type, String obj) {
   doc["sensor_id"] = _sensor_id;
   doc["sensor_type"] = _sensor_type;
   doc["data"] = serialized(obj);
+  doc["timestamp"] = (char*)NULL;
 #ifdef DEBUG
   Serial.println("");
   serializeJsonPretty(doc, Serial);
