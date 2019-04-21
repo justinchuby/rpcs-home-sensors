@@ -72,10 +72,10 @@ StoveState getStoveState() {
   // Find a moving average
   float avg = std::accumulate(max_temps.begin(), max_temps.end(), 0.0) / (float)max_temps.size();
   Serial.printf("avg %g\n", avg);
-  if (avg > STOVE_HOT_TEMP) {
+  if (avg >= STOVE_HOT_TEMP) {
     return StoveState::HOT;
   }
-  if (STOVE_COLD_TEMP < avg && avg < STOVE_HOT_TEMP) {
+  if (STOVE_COLD_TEMP <= avg && avg < STOVE_HOT_TEMP) {
     return StoveState::WARM;
   }
   return StoveState::COLD;
