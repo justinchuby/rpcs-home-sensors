@@ -9,6 +9,7 @@
 #define STOVE_COLD_TEMP 40.0
 #define MOVING_AVG_SIZE 5
 #define REFRESH_RATE 500
+#define HANDSHAKE_INTERVAL 10000
 
 enum class StoveState { HOT, COLD, WARM, UNKNOWN };
 
@@ -18,8 +19,8 @@ HSJsonConnector connector;
 float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 // Initialize a buffer for moving average
 std::deque<float> max_temps;
-
 StoveState stove_state = StoveState::COLD;
+int time_count = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -40,6 +41,12 @@ void loop() {
     stove_state = new_stove_state;
   }
   delay(REFRESH_RATE);
+
+  time_count += REFRESH_RATE;
+  if (time_count > HANDSHAKE_INTERVAL) {
+    sendHandshake();
+    time_count = 0;
+  }
 }
 
 StoveState getStoveState() {
@@ -85,11 +92,11 @@ void sendData(StoveState status) {
   String data;
   switch (status) {
     case StoveState::HOT:
-      data = "[{\"message\":\"STOVE_HOT\", \"value\":[" + pixels_string + "]}]";
+      data = "{\"message\":\"STOVE_HOT\", \"value\":[" + pixels_string + "]}";
       break;
     case StoveState::COLD:
       data =
-          "[{\"message\":\"STOVE_COLD\", \"value\":[" + pixels_string + "]}]";
+          "{\"message\":\"STOVE_COLD\", \"value\":[" + pixels_string + "]}";
       break;
   }
 
@@ -97,4 +104,8 @@ void sendData(StoveState status) {
     // TODO: check wifi connection
     connector.send(HSEvent::DATA, data);
   }
+}
+
+void sendHandshake() {
+  connector.send(HSEvent::HANDSHAKE, "[]");
 }
