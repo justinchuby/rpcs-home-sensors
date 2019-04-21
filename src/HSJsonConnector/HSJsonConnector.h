@@ -15,14 +15,17 @@ class HSJsonConnector {
   void setSensor(const char* sensor_id, const char* sensor_type);
 
   void setServer(const char* url);
+  void setServerAuth(const char* auth);
   // returns a http response code
   // Accepts a serialized json object
   int send(HSEvent type, String obj);
 
  private:
-  String _sensor_id;
-  String _sensor_type;
-  String _server_url;
+  const char* _sensor_id;
+  const char* _sensor_type;
+  const char* _server_url;
+  const char* _server_auth;
+  bool _require_auth = false;
   HTTPClient _client;
 };
 

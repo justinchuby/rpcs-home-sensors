@@ -26,6 +26,9 @@ void setup() {
   Serial.begin(115200);
   connector.setSensor(SENSOR_ID, SENSOR_TYPE);
   connector.setServer(SERVER_URL);
+  #ifdef SERVER_AUTH
+  connector.setServerAuth(SERVER_AUTH);
+  #endif
   thermalCam.begin();
   connectWifi(WIFI_SSID, WIFI_PASS);
 
