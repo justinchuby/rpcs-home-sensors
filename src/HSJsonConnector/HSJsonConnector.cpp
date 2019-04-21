@@ -13,7 +13,7 @@ void HSJsonConnector::setServer(const char* url) {
 void HSJsonConnector::setServerAuth(const char* auth) {
   // TODO: check param type and copy the values
   _server_auth = auth;
-  _require_auth = true
+  _require_auth = true;
 }
 
 void HSJsonConnector::setSensor(const char* sensor_id,
