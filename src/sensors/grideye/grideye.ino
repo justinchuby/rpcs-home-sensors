@@ -9,7 +9,7 @@
 #define STOVE_COLD_TEMP 40.0
 #define MOVING_AVG_SIZE 10
 
-enum class StoveState { HOT, COLD, UNKNOWN };
+enum class StoveState { HOT, COLD, WARM, UNKNOWN };
 
 Adafruit_AMG88xx thermalCam;
 HSJsonConnector connector;
@@ -34,7 +34,7 @@ void loop() {
   // Read all the pixels
   thermalCam.readPixels(pixels);
   StoveState new_stove_state = getStoveState();
-  if (new_stove_state != stove_state) {
+  if (new_stove_state != stove_state && new_stove_state != StoveState::WARM) {
     sendData(new_stove_state);
     stove_state = new_stove_state;
   }
@@ -42,27 +42,23 @@ void loop() {
 }
 
 StoveState getStoveState() {
-  float max_temp = *(std::max_element(pixels, pixels + AMG88xx_PIXEL_ARRAY_SIZE));
+  // Store the current max temperature to the buffer
+  float maxtemp = *(std::max_element(pixels, pixels + AMG88xx_PIXEL_ARRAY_SIZE));
   if (max_temps.size() == MOVING_AVG_SIZE) {
-    // The max_temps buffer is full
-
+    // The max_temps buffer is full, pop the oldest one
+    max_temps.pop_front();
   }
-  int count = 0;
-  for (int k = 1; k <= 3; k++) {
-    for (int j = 0; j <= AMG88xx_PIXEL_ARRAY_SIZE - 1; j++) {
-      if (pixels[j] > 30.0) {
-        count = count + 1;
-        break;
-      }
-    }
-    delay(1000);
+  max_temps.push_back(maxtemp);
+  // Find a moving average
+  float avg = std::accumulate(max_temps.begin(), max_temps.end(), 0.0) / (float)max_temps.size();
+  Serial.println("avg", avg);
+  if (avg > STOVE_HOT_TEMP) {
+    return StoveState::HOT;
   }
-  if (count == 3) {
-    Serial.println("Stove is on");
+  if (STOVE_COLD_TEMP < avg && avg < STOVE_HOT_TEMP) {
+    return StoveState::WARM;
   }
-
-  count = 0;
-  return StoveState::UNKNOWN;
+  return StoveState::COLD;
 }
 
 void connectWifi(const char* ssid, const char* password) {
