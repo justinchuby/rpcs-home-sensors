@@ -11,8 +11,8 @@
 #define REFRESH_RATE 500
 // 1 Minute
 #define HANDSHAKE_INTERVAL 60000
-// 5 Minutes
-#define DATA_INTERVAL 300000
+// 10 seconds
+#define DATA_INTERVAL 10000
 
 enum class StoveState { HOT, COLD, WARM, UNKNOWN };
 
@@ -56,7 +56,9 @@ void loop() {
     time_count_handshake = 0;
   }
   if (time_count_data > DATA_INTERVAL) {
-    sendData(getStoveState());
+    // sendData(getStoveState());
+    // DEBUG: send data every 10 secs
+    sendData(StoveState::UNKNOWN);
     time_count_data = 0;
   }
 }
@@ -113,6 +115,10 @@ void sendData(StoveState status) {
     case StoveState::COLD:
       data =
           "{\"message\":\"STOVE_COLD\", \"value\":[" + pixels_string + "]}";
+      break;
+    case StoveState::UNKNOWN:
+      data =
+          "{\"message\":\"STOVE_UNKNOWN\", \"value\":[" + pixels_string + "]}";
       break;
   }
 
