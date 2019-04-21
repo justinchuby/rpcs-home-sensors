@@ -5,11 +5,14 @@
 #include <deque>
 #include "config.h"
 
-#define STOVE_HOT_TEMP 43.0
+#define STOVE_HOT_TEMP 70.0
 #define STOVE_COLD_TEMP 40.0
 #define MOVING_AVG_SIZE 5
 #define REFRESH_RATE 500
-#define HANDSHAKE_INTERVAL 10000
+// 1 Minute
+#define HANDSHAKE_INTERVAL 60000
+// 5 Minutes
+#define DATA_INTERVAL 300000
 
 enum class StoveState { HOT, COLD, WARM, UNKNOWN };
 
@@ -20,7 +23,8 @@ float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 // Initialize a buffer for moving average
 std::deque<float> max_temps;
 StoveState stove_state = StoveState::COLD;
-int time_count = 0;
+int time_count_handshake = 0;
+int time_count_data = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -39,16 +43,20 @@ void loop() {
   // Read all the pixels
   thermalCam.readPixels(pixels);
   StoveState new_stove_state = getStoveState();
-  if (new_stove_state != stove_state && new_stove_state != StoveState::WARM) {
+  if (new_stove_state != stove_state) {
     sendData(new_stove_state);
     stove_state = new_stove_state;
   }
   delay(REFRESH_RATE);
 
   time_count += REFRESH_RATE;
-  if (time_count > HANDSHAKE_INTERVAL) {
+  if (time_count_handshake > HANDSHAKE_INTERVAL) {
     sendHandshake();
-    time_count = 0;
+    time_count_handshake = 0;
+  }
+  if (time_count_data > DATA_INTERVAL) {
+    sendData(getStoveState());
+    time_count_data = 0;
   }
 }
 
