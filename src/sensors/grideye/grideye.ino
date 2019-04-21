@@ -49,7 +49,8 @@ void loop() {
   }
   delay(REFRESH_RATE);
 
-  time_count += REFRESH_RATE;
+  time_count_handshake += REFRESH_RATE;
+  time_count_data += REFRESH_RATE;
   if (time_count_handshake > HANDSHAKE_INTERVAL) {
     sendHandshake();
     time_count_handshake = 0;
@@ -104,6 +105,10 @@ void sendData(StoveState status) {
   switch (status) {
     case StoveState::HOT:
       data = "{\"message\":\"STOVE_HOT\", \"value\":[" + pixels_string + "]}";
+      break;
+    case StoveState::WARM:
+      data =
+          "{\"message\":\"STOVE_WARM\", \"value\":[" + pixels_string + "]}";
       break;
     case StoveState::COLD:
       data =
