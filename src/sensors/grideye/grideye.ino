@@ -5,9 +5,10 @@
 #include <deque>
 #include "config.h"
 
-#define STOVE_HOT_TEMP 50.0
+#define STOVE_HOT_TEMP 43.0
 #define STOVE_COLD_TEMP 40.0
 #define MOVING_AVG_SIZE 10
+#define REFRESH_RATE 500
 
 enum class StoveState { HOT, COLD, WARM, UNKNOWN };
 
@@ -38,7 +39,7 @@ void loop() {
     sendData(new_stove_state);
     stove_state = new_stove_state;
   }
-  delay(100);
+  delay(REFRESH_RATE);
 }
 
 StoveState getStoveState() {
@@ -51,7 +52,7 @@ StoveState getStoveState() {
   max_temps.push_back(maxtemp);
   // Find a moving average
   float avg = std::accumulate(max_temps.begin(), max_temps.end(), 0.0) / (float)max_temps.size();
-  Serial.println("avg", avg);
+  Serial.printf("avg %g\n", avg);
   if (avg > STOVE_HOT_TEMP) {
     return StoveState::HOT;
   }
