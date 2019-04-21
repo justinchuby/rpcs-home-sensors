@@ -59,7 +59,7 @@ int HSJsonConnector::send(HSEvent type, String obj) {
 
   _client.addHeader("Content-Type", "application/json");
   if (_require_auth) {
-    _client.addHeader("Authorization", _require_auth);
+    _client.addHeader("Authorization", _server_auth);
   }
   String serialized_doc;
   serializeJson(doc, serialized_doc);
