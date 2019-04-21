@@ -7,7 +7,7 @@
 
 #define STOVE_HOT_TEMP 43.0
 #define STOVE_COLD_TEMP 40.0
-#define MOVING_AVG_SIZE 10
+#define MOVING_AVG_SIZE 5
 #define REFRESH_RATE 500
 
 enum class StoveState { HOT, COLD, WARM, UNKNOWN };
