@@ -10,6 +10,12 @@ void HSJsonConnector::setServer(const char* url) {
   _server_url = url;
 }
 
+void HSJsonConnector::setServerAuth(const char* auth) {
+  // TODO: check param type and copy the values
+  _server_auth = auth;
+  _require_auth = true;
+}
+
 void HSJsonConnector::setSensor(const char* sensor_id,
                                 const char* sensor_type) {
   _sensor_id = sensor_id;
@@ -42,6 +48,7 @@ int HSJsonConnector::send(HSEvent type, String obj) {
   doc["sensor_id"] = _sensor_id;
   doc["sensor_type"] = _sensor_type;
   doc["data"] = serialized(obj);
+  doc["timestamp"] = (char*)NULL;
 #ifdef DEBUG
   Serial.println("");
   serializeJsonPretty(doc, Serial);
@@ -52,9 +59,13 @@ int HSJsonConnector::send(HSEvent type, String obj) {
   _client.begin(_server_url);
 
   _client.addHeader("Content-Type", "application/json");
+  if (_require_auth) {
+    _client.addHeader("Authorization", _server_auth);
+  }
   String serialized_doc;
   serializeJson(doc, serialized_doc);
-  int resCode = _client.POST(serialized_doc);
+  // Send a JSON array according to server spec
+  int resCode = _client.POST("[" + serialized_doc + "]");
 
 #ifdef DEBUG
   if (resCode > 0) {
