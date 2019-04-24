@@ -65,6 +65,7 @@ int pastmatrix[15][15];
 HSJsonConnector connector;
 
 
+
 void setup(){
     
   pinMode(s0, OUTPUT); 
@@ -117,11 +118,18 @@ void setup(){
 }
 
 
+
+
 void loop(){
   //Loop through and read all 16 values
   //Reports back Value at channel 6 is: 346
     int count = 0;
     int max_value = 0;
+    String data;
+    String value_string;
+  // for (int i = 0; i < AMG88xx_PIXEL_ARRAY_SIZE; i++) {
+  //   pixels_string += (pixels_string == NULL ? "" : ",") + String(pixels[i], 2);
+  // }
 //  StaticJsonDocument<200> doc;
 //
 //  doc["sensor_"] = "gps";
@@ -148,6 +156,7 @@ void loop(){
           }
           Serial.print(valor);
           Serial.print("\t");
+          value_string += (value_string == NULL ? "" : ",") + String(valor);
           digitalWrite(COL_pin,!digitalRead(COL_pin));
         } 
         Serial.println();
@@ -157,10 +166,14 @@ void loop(){
       Serial.println();
       if (count > 20 || max_value > 550) {
         Serial.println("FEET DETECTED!");
+        data = "{\"message\":\"FEET_DETECTED\", \"value\":[" + value_string + "]}";
+        connector.send(HSEvent::DATA, data);
       }
 
 
 }
+
+
 
 
 int readMux(byte channel){
@@ -178,6 +191,8 @@ int readMux(byte channel){
   return val;
 }
 
+
+
 void writeMux(byte channel){
   byte controlPin[] = {w0, w1, w2, w3};
 
@@ -186,6 +201,8 @@ void writeMux(byte channel){
     digitalWrite(controlPin[i], muxChannel[channel][i]);
   }
 }
+
+
 
 void connectWifi(const char* ssid, const char* password) {
   Serial.print("Connecting Wifi");
