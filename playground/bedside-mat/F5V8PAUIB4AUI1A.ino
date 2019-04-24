@@ -1,5 +1,14 @@
 
 #include <ArduinoJson.h>
+#include <HSJsonConnector.h>
+
+#define SENSOR_ID "27e72ef-e419-4364-9a23-2af8463bea6d"
+#define WIFI_SSID "AndroidAPDEB3"
+#define WIFI_PASS "vvmp5133"
+#define SERVER_URL "http://localhost"
+#define SENSOR_TYPE "pressure_mat"
+#define SERVER_URL "http://localhost"
+#define SERVER_AUTH "Basic aHNfdXNlcjpycGNzX2hzMjAxOQ=="
 
 const int thresh = 150;
 //Mux control pins for analog signal (SIG_pin) default for arduino mini pro
@@ -41,7 +50,7 @@ const boolean muxChannel[16][4]={
     {1,0,1,1}, //channel 13
     {0,1,1,1}, //channel 14
     {1,1,1,1}  //channel 15
-  };
+  }
 
 
 //incoming serial byte
@@ -52,6 +61,9 @@ int calibra[15][15];         //Calibration array for the min values of each od t
 int minsensor=254;          //Variable for staring the min array
 int multiplier = 254;
 int pastmatrix[15][15];
+
+HSJsonConnector connector;
+
 
 void setup(){
     
@@ -85,8 +97,17 @@ void setup(){
   digitalWrite(STATUS_pin, HIGH);
   digitalWrite(COL_pin, HIGH);
   
- 
+  connector.setSensor(SENSOR_ID, SENSOR_TYPE);
+  connector.setServer(SERVER_URL);
+  #ifdef SERVER_AUTH
+  connector.setServerAuth(SERVER_AUTH);
+  #endif
   
+  connectWifi(WIFI_SSID, WIFI_PASS);
+
+  delay(100);
+
+
   Serial.begin(115200);
   Serial.println("asdfg");
   Serial.println("\nCalibrating...\n");
@@ -164,4 +185,19 @@ void writeMux(byte channel){
   for(byte i = 0; i < 4; i ++){
     digitalWrite(controlPin[i], muxChannel[channel][i]);
   }
+}
+
+void connectWifi(const char* ssid, const char* password) {
+  Serial.print("Connecting Wifi");
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
 }
