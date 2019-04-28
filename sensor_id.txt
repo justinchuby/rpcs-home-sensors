@@ -1,2 +1,5 @@
 sensor_id	type	location
 b78a4d8e-54cb-42f0-9dcb-b223663dfce5	grid_eye	kitchen
+505d642b-730f-41ad-a5ee-2dfc04a71b71	door	main door
+c76c5d12-6647-11e9-a923-1681be663d3e	pir	bathroom
+
