@@ -3,10 +3,6 @@
 
 // 1 Minute
 #define HANDSHAKE_INTERVAL 60000
-// // 10 seconds
-// #define DATA_INTERVAL 10000
-//Sensor type
-#define SENSOR_TYPE "pir"
 #define REFRESH_RATE 500
 
 int inputPin = 21;               // choose the input pin (for PIR sensor)
