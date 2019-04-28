@@ -22,7 +22,7 @@ HSJsonConnector connector;
 float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 // Initialize a buffer for moving average
 std::deque<float> max_temps;
-StoveState stove_state = StoveState::COLD;
+StoveState stove_state = StoveState::UNKNOWN;
 int time_count_handshake = 0;
 int time_count_data = 0;
 
