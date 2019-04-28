@@ -30,9 +30,9 @@ void setup() {
   Serial.begin(115200);
   connector.setSensor(SENSOR_ID, SENSOR_TYPE);
   connector.setServer(SERVER_URL);
-  #ifdef SERVER_AUTH
+#ifdef SERVER_AUTH
   connector.setServerAuth(SERVER_AUTH);
-  #endif
+#endif
   thermalCam.begin();
   connectWifi(WIFI_SSID, WIFI_PASS);
 
@@ -65,14 +65,16 @@ void loop() {
 
 StoveState getStoveState() {
   // Store the current max temperature to the buffer
-  float maxtemp = *(std::max_element(pixels, pixels + AMG88xx_PIXEL_ARRAY_SIZE));
+  float maxtemp =
+      *(std::max_element(pixels, pixels + AMG88xx_PIXEL_ARRAY_SIZE));
   if (max_temps.size() == MOVING_AVG_SIZE) {
     // The max_temps buffer is full, pop the oldest one
     max_temps.pop_front();
   }
   max_temps.push_back(maxtemp);
   // Find a moving average
-  float avg = std::accumulate(max_temps.begin(), max_temps.end(), 0.0) / (float)max_temps.size();
+  float avg = std::accumulate(max_temps.begin(), max_temps.end(), 0.0) /
+              (float)max_temps.size();
   Serial.printf("avg %g\n", avg);
   if (avg >= STOVE_HOT_TEMP) {
     return StoveState::HOT;
@@ -109,12 +111,10 @@ void sendData(StoveState status) {
       data = "{\"message\":\"STOVE_HOT\", \"value\":[" + pixels_string + "]}";
       break;
     case StoveState::WARM:
-      data =
-          "{\"message\":\"STOVE_WARM\", \"value\":[" + pixels_string + "]}";
+      data = "{\"message\":\"STOVE_WARM\", \"value\":[" + pixels_string + "]}";
       break;
     case StoveState::COLD:
-      data =
-          "{\"message\":\"STOVE_COLD\", \"value\":[" + pixels_string + "]}";
+      data = "{\"message\":\"STOVE_COLD\", \"value\":[" + pixels_string + "]}";
       break;
     case StoveState::UNKNOWN:
       data =
@@ -128,6 +128,4 @@ void sendData(StoveState status) {
   }
 }
 
-void sendHandshake() {
-  connector.send(HSEvent::HANDSHAKE, "[]");
-}
+void sendHandshake() { connector.send(HSEvent::HANDSHAKE, "[]"); }
