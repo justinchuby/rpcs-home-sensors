@@ -9,9 +9,6 @@ int inputPin = 21;   // choose the input pin (for PIR sensor)
 int pirState = LOW;  // we start, assuming no motion detected
 int val = 0;         // variable for reading the pin status
 
-// set up the 'pir0' feed
-// AdafruitIO_Feed *counter = io.feed("pir1");
-
 HSJsonConnector connector;
 int time_count_handshake = 0;
 
@@ -35,12 +32,6 @@ void setup() {
 }
 
 void loop() {
-  // io.run(); is required for all sketches.
-  // it should always be present at the top of your loop
-  // function. it keeps the client connected to
-  // io.adafruit.com, and processes any incoming data.
-  //  io.run();
-
   val = digitalRead(inputPin);  // read input value
   if (val == HIGH) {            // check if the input is HIGH
     if (pirState == LOW) {
