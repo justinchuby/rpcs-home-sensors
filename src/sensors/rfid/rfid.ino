@@ -6,7 +6,7 @@
 
 // 1 Minute
 #define HANDSHAKE_INTERVAL 60000
-#define REFRESH_RATE 500
+#define REFRESH_RATE 100
 
 #define SS_PIN 23
 #define RST_PIN 22
