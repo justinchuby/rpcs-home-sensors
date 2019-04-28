@@ -3,7 +3,7 @@
 
 // 1 Minute
 #define HANDSHAKE_INTERVAL 60000
-#define REFRESH_RATE 500
+#define REFRESH_RATE 100
 
 int inputPin = 21;   // choose the input pin (for PIR sensor)
 int pirState = LOW;  // we start, assuming no motion detected
