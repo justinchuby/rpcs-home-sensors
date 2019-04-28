@@ -1,0 +1,6 @@
+#define WIFI_SSID "CMU-DEVICE"
+#define WIFI_PASS ""
+#define SENSOR_ID "78274560-a6e5-4ee4-b29b-60a478cb9aa7"
+#define SENSOR_TYPE "pir"
+#define SERVER_URL "http://kinect.andrew.cmu.edu:8000/hs/events"
+#define SERVER_AUTH "Basic aHNfdXNlcjpycGNzX2hzMjAxOQ=="
