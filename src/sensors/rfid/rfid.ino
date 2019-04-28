@@ -40,7 +40,7 @@ void loop() {
     return;
   }
   // Show UID on serial monitor
-  Serial.print("UID tag :");
+  Serial.print("UID tag : ");
   String content = "";
   byte letter;
   for (byte i = 0; i < mfrc522.uid.size; i++) {
@@ -58,7 +58,7 @@ void loop() {
     Serial.println("Patient near restroom, check PIR");
     Serial.println();
     delay(3000);
-    sendData(1);
+    sendData(content.substring(1));
   }
 
   delay(REFRESH_RATE);
@@ -69,24 +69,11 @@ void loop() {
     sendHandshake();
     time_count_handshake = 0;
   }
-  if (time_count_data > DATA_INTERVAL) {
-    // sendData(getStoveState());
-    // DEBUG: send data every 10 secs
-    sendData(2);
-    time_count_data = 0;
-  }
 }
 
-void sendData(int val) {
-  String data;
-  switch (val) {
-    case 1:
-      data = "{\"message\":\"Patient near restroom, check PIR\", \"value\":[]}";
-      break;
-    case 2:
-      data = "{\"message\":\"UNKNOWN\", \"value\":[]}";
-      break;
-  }
+void sendData(String message) {
+  String data = "{\"message\":\"RFID_TAGGED\", \"value\":" + message + "}";
+
   if (true) {
     // TODO: check wifi connection
     connector.send(HSEvent::DATA, data);
@@ -95,11 +82,17 @@ void sendData(int val) {
 
 void connectWifi(const char* ssid, const char* password) {
   Serial.print("Connecting Wifi");
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
+    Serial.print(".");
   }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
 }
+
 void sendHandshake() { connector.send(HSEvent::HANDSHAKE, "[]"); }

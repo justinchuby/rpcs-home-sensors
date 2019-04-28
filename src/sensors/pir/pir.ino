@@ -85,11 +85,17 @@ void sendData(int val) {
 
 void connectWifi(const char* ssid, const char* password) {
   Serial.print("Connecting Wifi");
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
   WiFi.begin(ssid, password);
+
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
+    Serial.print(".");
   }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
 }
 
 void sendHandshake() { connector.send(HSEvent::HANDSHAKE, "[]"); }
