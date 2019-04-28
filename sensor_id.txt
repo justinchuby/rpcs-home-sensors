@@ -4,4 +4,3 @@ b78a4d8e-54cb-42f0-9dcb-b223663dfce5	grid_eye	kitchen
 c76c5d12-6647-11e9-a923-1681be663d3e	pir	bathroom
 78274560-a6e5-4ee4-b29b-60a478cb9aa7	pir	kitchen
 c26e4e88-2ecb-42ff-8482-4af80307a485	rfid	bathroom
-505d642b-730f-41ad-a5ee-2dfc04a71b71	door	main door
